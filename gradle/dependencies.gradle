@@ -1,0 +1,140 @@
+ext {
+    versions = [:]
+    libraries = [:]
+}
+
+versions.activiti = '5.15'
+
+versions.aspectj = '1.6.10'
+
+versions.groovy = '2.4.3'
+
+versions.hibernate = '4.2.1.Final'
+
+versions.jackson = '1.9.11'
+
+versions.jcaptcha = '1.0'
+
+versions.logback = '1.1.1'
+
+versions.slf4j = '1.7.10'
+
+versions.spring = '3.2.0.RELEASE'
+versions.spring_security = '3.1.4.RELEASE'
+
+versions.tomcat = '6.0.41'
+versions.tomcat_plugin = '2.0'
+
+
+libraries.activiti_engine = "org.activiti:activiti-engine:${versions.activiti}"
+libraries.activiti_spring = "org.activiti:activiti-spring:${versions.activiti}"
+
+libraries.aspectjrt = "org.aspectj:aspectjrt:${versions.aspectj}"
+libraries.aspectjweaver = "org.aspectj:aspectjweaver:${versions.aspectj}"
+
+libraries.cas_server_core = 'org.jasig.cas:cas-server-core:3.5.2'
+
+libraries.cas_client_core = 'org.jasig.cas.client:cas-client-core:3.1.12'
+
+libraries.cglib = 'cglib:cglib:2.2'
+
+libraries.commons_collections = 'commons-collections:commons-collections:3.2.1'
+
+libraries.commons_lang = 'commons-lang:commons-lang:2.5'
+
+libraries.commons_logging = 'commons-logging:commons-logging:1.1.1'
+
+// groovy-all include all below modules
+libraries.groovy_all = "org.codehaus.groovy:groovy-all:${versions.groovy}"
+
+libraries.groovy = "org.codehaus.groovy:groovy:${versions.groovy}"
+// libraries.groovy_ant = "org.codehaus.groovy:groovy-ant:${versions.groovy}"
+// libraries.groovy_bsf = "org.codehaus.groovy:groovy-bsf:${versions.groovy}"
+// libraries.groovy_console = "org.codehaus.groovy:groovy-console:${versions.groovy}"
+// libraries.groovy_docgenerator = "org.codehaus.groovy:groovy-docgenerator:${versions.groovy}"
+// libraries.groovy_groovydoc = "org.codehaus.groovy:groovy-groovydoc:${versions.groovy}"
+// libraries.groovy_groovysh = "org.codehaus.groovy:groovy-groovysh:${versions.groovy}"
+// libraries.groovy_jmx = "org.codehaus.groovy:groovy-jmx:${versions.groovy}"
+// libraries.groovy_json = "org.codehaus.groovy:groovy-json:${versions.groovy}"
+// libraries.groovy_jsr223 = "org.codehaus.groovy:groovy-jsr223:${versions.groovy}"
+// libraries.groovy_servlet = "org.codehaus.groovy:groovy-servlet:${versions.groovy}"
+// libraries.groovy_sql = "org.codehaus.groovy:groovy-sql:${versions.groovy}"
+// libraries.groovy_swing = "org.codehaus.groovy:groovy-swing:${versions.groovy}"
+// libraries.groovy_test = "org.codehaus.groovy:groovy-test:${versions.groovy}"
+// libraries.groovy_testng = "org.codehaus.groovy:groovy-testng:${versions.groovy}"
+// libraries.groovy_xml = "org.codehaus.groovy:groovy-xml:${versions.groovy}"
+
+libraries.guava = 'com.google.guava:guava:18.0-rc2'
+
+libraries.hibernate_c3p0 = "org.hibernate:hibernate-c3p0:${versions.hibernate}"
+libraries.hibernate_core = "org.hibernate:hibernate-core:${versions.hibernate}"
+libraries.hibernate_ehcache = "org.hibernate:hibernate-ehcache:${versions.hibernate}"
+libraries.hibernate_entitymanager = "org.hibernate:hibernate-entitymanager:${versions.hibernate}"
+libraries.hibernate_envers = "org.hibernate:hibernate-envers:${versions.hibernate}"
+libraries.hibernate_infinispan = "org.hibernate:hibernate-infinispan:${versions.hibernate}"
+libraries.hibernate_proxool = "org.hibernate:hibernate-proxool:${versions.hibernate}"
+
+libraries.jackson_core_asl = "org.codehaus.jackson:jackson-core-asl:${versions.jackson}"
+libraries.jackson_mapper_asl = "org.codehaus.jackson:jackson-mapper-asl:${versions.jackson}"
+libraries.jackson_mapper_lgpl = "org.codehaus.jackson:jackson-mapper-lgpl:${versions.jackson}"
+
+libraries.jcaptcha = dependencies.module("com.octo.captcha:jcaptcha:${versions.jcaptcha}") {
+    dependency "com.octo.captcha:jcaptcha-api:${versions.jcaptcha}"
+    exclude group: 'com.jhlabs', module: 'imaging'
+}
+
+libraries.junit = 'junit:junit:4.12'
+
+libraries.json_lib = 'net.sf.json-lib:json-lib:2.4:jdk15@jar'
+
+libraries.jsp_api = 'javax.servlet.jsp:jsp-api:2.1'
+
+libraries.jstl = 'jstl:jstl:1.2'
+
+libraries.log4j = dependencies.module('log4j:log4j:1.2.15') {
+    exclude group: 'com.sun.jdmk', module: 'jmxtools'
+    exclude group: 'javax.jms', module: 'jms'
+    exclude group: 'com.sun.jmx', module: 'jmxri'
+}
+
+libraries.logback_classic = dependencies.module("ch.qos.logback:logback-classic:${versions.logback}") {
+    dependency "ch.qos.logback:logback-core:${versions.logback}"
+    dependency "org.slf4j:slf4j-api:${versions.slf4j}"
+}
+
+libraries.mongo_java_driver = 'org.mongodb:mongo-java-driver:2.13.0'
+
+libraries.poi = 'org.apache.poi:poi:3.7'
+
+libraries.quartz = 'org.quartz-scheduler:quartz:1.8.4'
+
+libraries.servlet_api = 'javax.servlet:servlet-api:2.5'
+
+libraries.slf4j_api = "org.slf4j:slf4j-api:${versions.slf4j}"
+libraries.slf4j_simple = "org.slf4j:slf4j-simple:${versions.slf4j}"
+
+libraries.spring_beans = "org.springframework:spring-beans:${versions.spring}"
+libraries.spring_context = "org.springframework:spring-context:${versions.spring}"
+libraries.spring_context_support = "org.springframework:spring-context-support:${versions.spring}"
+libraries.spring_core = "org.springframework:spring-core:${versions.spring}"
+libraries.spring_orm = "org.springframework:spring-orm:${versions.spring}"
+libraries.spring_security_acl = "org.springframework.security:spring-security-acl:${versions.spring_security}"
+libraries.spring_security_cas = "org.springframework.security:spring-security-cas:${versions.spring_security}"
+libraries.spring_security_config = "org.springframework.security:spring-security-config:${versions.spring_security}"
+libraries.spring_security_core = "org.springframework.security:spring-security-core:${versions.spring_security}"
+libraries.spring_security_crypto = "org.springframework.security:spring-security-crypto:${versions.spring_security}"
+libraries.spring_security_taglibs = "org.springframework.security:spring-security-taglibs:${versions.spring_security}"
+libraries.spring_security_web = "org.springframework.security:spring-security-web:${versions.spring_security}"
+libraries.spring_test = "org.springframework:spring-test:${versions.spring}"
+libraries.spring_tx = "org.springframework:spring-tx:${versions.spring}"
+libraries.spring_web = "org.springframework:spring-web:${versions.spring}"
+libraries.spring_webmvc = "org.springframework:spring-webmvc:${versions.spring}"
+
+libraries.tomcat = dependencies.module("org.apache.tomcat:catalina:${versions.tomcat}") {
+	dependency "org.apache.tomcat:coyote:${versions.tomcat}"
+    dependency "org.apache.tomcat:jasper:${versions.tomcat}"
+	dependency "org.apache.tomcat:annotations-api:${versions.tomcat}"
+}
+libraries.tomcat_plugin = "com.bmuschko:gradle-tomcat-plugin:${versions.tomcat_plugin}"
+
+libraries.urlrewritefilter = 'org.tuckey:urlrewritefilter:4.0.3'

@@ -1,0 +1,16 @@
+apply from: "$rootDir/gradle/dependencies.gradle"
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+repositories {
+    maven {
+        url 'https://repo.gradle.org/gradle/libs'
+    }
+}
+
+dependencies {
+    compile libraries.slf4j_api
+
+    testCompile libraries.junit
+}
