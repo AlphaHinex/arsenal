@@ -22,23 +22,23 @@ import java.util.Set;
  */
 public class TFTPClientNIO {
     
-    private String TFTP_SERVER_ADDRESS = "192.168.1.11";
-    private int TFTP_SERVER_PORT = 69;
+    private static final String TFTP_SERVER_ADDRESS = "192.168.1.11";
+    private static final int TFTP_SERVER_PORT = 69;
     
     private Selector selector;
     private List<DatagramChannel> datagramChannels;
     private SocketAddress socketAddress;
     private int fileCount;
     
-    private final byte OP_RRQ = 1;
-    private final byte OP_DATAPACKET = 3;
-    private final byte OP_ACK = 4;
-    private final byte OP_ERROR = 5;
-    private final int PACKET_SIZE = 1024;
+    private static final byte OP_RRQ = 1;
+    private static final byte OP_DATAPACKET = 3;
+    private static final byte OP_ACK = 4;
+    private static final byte OP_ERROR = 5;
+    private static final int PACKET_SIZE = 1024;
     
     public static void main(String[] args) throws Exception {
         TFTPClientNIO tFTPClientNio = new TFTPClientNIO();
-        String[] files = { "demo.txt", "TFTP.pdf" };
+        String[] files = {"demo.txt", "TFTP.pdf"};
         tFTPClientNio.getFiles(files);
     }
     
@@ -79,7 +79,7 @@ public class TFTPClientNIO {
     private void readFiles() throws IOException {
         int counter = 0;
         while (counter < fileCount) {
-            counter ++;
+            counter++;
             int readyChannels = selector.select();
             if (readyChannels == 0) {
                 continue;
@@ -120,14 +120,14 @@ public class TFTPClientNIO {
             // System.out.println("Packet Received from TFTP Server: " + remoteSocketAddress);
             
             // STEP 2.2: Read OPCODE
-            byte[] opCode = { dst.get(0), dst.get(1) };
+            byte[] opCode = {dst.get(0), dst.get(1)};
             // System.out.println("Got OPCODE from TFTP Server for this Packet: " + opCode[0] + ", " + opCode[1]);
             
             if (opCode[1] == OP_ERROR) {
                 System.out.println("Type of PACKET Received is ERROR!");
             } else if (opCode[1] == OP_DATAPACKET) {
                 System.out.println("Type of PACKET Recevied is DATA.");
-                byte[] packetBlockNumber = { dst.get(2), dst.get(3) };
+                byte[] packetBlockNumber = {dst.get(2), dst.get(3)};
                 System.out.println("Packet Block Number: " + packetBlockNumber[0] + ", " + packetBlockNumber[1]);
                 
                 // STEP 2.3: Read Packet
@@ -147,18 +147,19 @@ public class TFTPClientNIO {
         byte fileContent[] = new byte[PACKET_SIZE];
         dst.flip(); // make buffer ready for read
         
-        int m = 0, counter = 0;
+        int m = 0;
+        int counter = 0;
         while (dst.hasRemaining()) {
             // skipping the first four control bytes
             // first two is OPCODE
             // second two is packet number
             if (counter > 3) {
                 fileContent[m] = dst.get();
-                m ++;
+                m++;
             } else {
                 dst.get();
             }
-            counter ++;
+            counter++;
         }
         System.out.println("Packet Reading Done.");
         
@@ -185,11 +186,7 @@ public class TFTPClientNIO {
      * last packet will be of size < 512
      */
     private boolean isLastPacket(ByteBuffer bb) {
-        if (bb.limit() < 512) {
-            return true;
-        } else {
-            return false;
-        }
+        return bb.limit() < 512;
     }
     
     /*
@@ -197,8 +194,8 @@ public class TFTPClientNIO {
      */
     private void sendAcknowledgment(byte[] blockNumber, SocketAddress socketAddress, DatagramChannel dc) throws IOException {
         System.out.println("Sending ACK... " + blockNumber[0] + ", " + blockNumber[1]);
-        byte[] ACK = { 0, OP_ACK, blockNumber[0], blockNumber[1] };
-        dc.send(ByteBuffer.wrap(ACK), socketAddress);
+        byte[] ack = {0, OP_ACK, blockNumber[0], blockNumber[1]};
+        dc.send(ByteBuffer.wrap(ack), socketAddress);
         System.out.println("Acknowledgement Sent");
     }
     
@@ -212,9 +209,9 @@ public class TFTPClientNIO {
         
         int position = 0;
         rrqByteArray[position] = zeroByte;
-        position ++;
+        position++;
         rrqByteArray[position] = opCode;
-        position ++;
+        position++;
         for (int i = 0; i < fileName.length(); i++) {
             rrqByteArray[position] = (byte) fileName.charAt(i);
             position++;
