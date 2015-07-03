@@ -3,6 +3,7 @@ apply from: "$rootDir/gradle/dependencies.gradle"
 apply from: "$rootDir/gradle/codeQuality.gradle"
 
 apply plugin: 'java'
+apply plugin: 'groovy'
 apply plugin: 'eclipse'
 
 sourceCompatibility = 1.6
