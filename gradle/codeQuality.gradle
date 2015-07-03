@@ -16,14 +16,15 @@ codenarc {
 }
 
 findbugs {
-	toolVersion = '2.0.3'
+    toolVersion = '2.0.3'
+    excludeFilter = file("$configDir/findbugs/excludeFilter.xml")
 }
 
 configurations.codenarc.resolutionStrategy.force(libraries.groovy_all)
 
 tasks.withType(FindBugs) {
     reports {
-        xml.enabled = false
-        html.enabled = true
+        xml.enabled = false 
+        html.enabled = true 
     }
 }
