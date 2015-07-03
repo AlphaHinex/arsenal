@@ -1,4 +1,5 @@
 apply plugin: 'checkstyle'
+apply plugin: 'codenarc'
 apply plugin: 'findbugs'
 
 def configDir = new File(buildscript.sourceFile.parentFile.parentFile, 'config')
@@ -10,9 +11,15 @@ checkstyle {
     configProperties.checkstyleConfigDir = checkstyleConfigDir
 }
 
+codenarc {
+    configFile = new File(configDir, 'codenarc.xml')
+}
+
 findbugs {
 	toolVersion = '2.0.3'
 }
+
+configurations.codenarc.resolutionStrategy.force(libraries.groovy_all)
 
 tasks.withType(FindBugs) {
     reports {
