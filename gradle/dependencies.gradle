@@ -113,6 +113,13 @@ libraries.servlet_api = 'javax.servlet:servlet-api:2.5'
 libraries.slf4j_api = "org.slf4j:slf4j-api:${versions.slf4j}"
 libraries.slf4j_simple = "org.slf4j:slf4j-simple:${versions.slf4j}"
 
+libraries.spock = [
+    'org.spockframework:spock-core:0.7-groovy-2.0@jar',
+    libraries.groovy,
+    'org.objenesis:objenesis:1.2@jar',
+    'cglib:cglib-nodep:2.2.2'
+]
+
 libraries.spring_beans = "org.springframework:spring-beans:${versions.spring}"
 libraries.spring_context = "org.springframework:spring-context:${versions.spring}"
 libraries.spring_context_support = "org.springframework:spring-context-support:${versions.spring}"

@@ -19,5 +19,6 @@ dependencies {
     compile libraries.slf4j_api,
             libraries.groovy
 
-    testCompile libraries.junit
+    testCompile libraries.junit,
+                libraries.spock
 }
