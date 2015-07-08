@@ -65,7 +65,7 @@ class AutoPack {
                         fileCount++
                         
                         if (path.endsWith('.class')) {
-                            def container = new File("$srcPath$path")
+                            def container = new File("$srcPath${File.separator}$path")
                             container.getParentFile().listFiles().each { file ->
                                 if (file.getName().startsWith(container.getName().replace('.class', '$'))) {
                                     writer.writeLine(file.getPath().replace(srcPath, ''))
@@ -93,7 +93,7 @@ class AutoPack {
                     if (packStyle == PackStyle.PACK_FLAT) {
                         fileNameOrPath = filePath.substring(filePath.lastIndexOf(File.separatorChar))
                     }
-                    CopyFile.copy(srcPath + filePath, desPath + fileNameOrPath)
+                    CopyFile.copy("$srcPath/$filePath", "$desPath/$fileNameOrPath")
                 }
             }
         }
