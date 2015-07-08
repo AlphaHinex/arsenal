@@ -1,6 +1,6 @@
 package org.hinex.alpha.arsenal.file
 
-import org.hinex.alpha.arsenal.test.TestResource
+import org.hinex.alpha.arsenal.test.fixtures.file.TestResource;
 
 import spock.lang.Shared
 import spock.lang.Specification

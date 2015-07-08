@@ -14,7 +14,7 @@ class AutoPack {
     public AutoPack(String fileListPath, 
                     String srcPath, 
                     String desPath,
-                    FileType fileType = FileType.TYPE_CLASS,
+                    FileType fileType = FileType.TYPE_SOURCE,
                     PackStyle packStyle = PackStyle.PACK_HIERARCHICAL) {
         this.fileListPath = fileListPath
         this.srcPath = srcPath
@@ -56,7 +56,7 @@ class AutoPack {
                     path = path.trim().replace('/', File.separator)
                     if (fileType == FileType.TYPE_CLASS) {
                         if (path.startsWith('src')) {
-                            path = path.replace('src', 'bin')
+                            path = path.replace('src', "build${File.separator}classes${File.separator}main")
                         }
                         if (path.endsWith('.java') || path.endsWith('.groovy')) {
                             path = path.replaceAll(/(\.java|\.groovy)/, '.class')
