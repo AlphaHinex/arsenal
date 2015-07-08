@@ -3,7 +3,6 @@ package org.hinex.alpha.arsenal.file
 import org.hinex.alpha.arsenal.autopack.AutoPack
 import org.hinex.alpha.arsenal.test.fixtures.file.TestResource
 
-import spock.lang.Shared
 import spock.lang.Specification
 
 class AutoPackSpec extends Specification {
@@ -82,7 +81,6 @@ class AutoPackSpec extends Specification {
     private def filter(String suffix) {
         new FilenameFilter() {
             boolean accept(File file, String name) {
-                println "$name, $suffix"
                 name.endsWith(suffix)
             }
         }
