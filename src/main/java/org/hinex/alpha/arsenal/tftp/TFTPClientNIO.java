@@ -1,4 +1,4 @@
-package org.hinex.alpha.arsenal.nio.tftp;
+package org.hinex.alpha.arsenal.tftp;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
