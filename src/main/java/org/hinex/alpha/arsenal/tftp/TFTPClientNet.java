@@ -36,8 +36,8 @@ public class TFTPClientNet {
 
     private final static int PACKET_SIZE = 516;
 
-    private DatagramSocket datagramSocket = null;
-    private InetAddress inetAddress = null;
+    private DatagramSocket datagramSocket;
+    private InetAddress inetAddress;
     private byte[] requestByteArray;
     private byte[] bufferByteArray;
     private DatagramPacket outBoundDatagramPacket;
@@ -107,16 +107,16 @@ public class TFTPClientNet {
             datagramSocket.receive(inBoundDatagramPacket);
 
             // Getting the first 4 characters from the TFTP packet
-            byte[] opCode = { bufferByteArray[0], bufferByteArray[1] };
+            byte[] opCode = {bufferByteArray[0], bufferByteArray[1]};
 
             if (opCode[1] == OP_ERROR) {
                 reportError();
             } else if (opCode[1] == OP_DATAPACKET) {
                 // Check for the TFTP packets block number
-                byte[] blockNumber = { bufferByteArray[2], bufferByteArray[3] };
+                byte[] blockNumber = {bufferByteArray[2], bufferByteArray[3]};
 
                 DataOutputStream dos = new DataOutputStream(byteOutOS);
-                dos.write(inBoundDatagramPacket.getData(), 4,inBoundDatagramPacket.getLength() - 4);
+                dos.write(inBoundDatagramPacket.getData(), 4, inBoundDatagramPacket.getLength() - 4);
 
                 //STEP 2.2: send ACK to TFTP server for received packet
                 sendAcknowledgment(blockNumber);
@@ -126,19 +126,19 @@ public class TFTPClientNet {
         return byteOutOS;
     }
     
-    private void reportError() {
-        String errorCode = new String(bufferByteArray, 3, 1);
-        String errorText = new String(bufferByteArray, 4, inBoundDatagramPacket.getLength() - 4);
+    private void reportError() throws IOException {
+        String errorCode = new String(bufferByteArray, 3, 1, "utf8");
+        String errorText = new String(bufferByteArray, 4, inBoundDatagramPacket.getLength() - 4, "utf8");
         System.err.println("Error: " + errorCode + " " + errorText);
     }
     
     private void sendAcknowledgment(byte[] blockNumber) {
-        byte[] ACK = { 0, OP_ACK, blockNumber[0], blockNumber[1] };
+        byte[] ackBytes = {0, OP_ACK, blockNumber[0], blockNumber[1]};
 
         // TFTP Server communicates back on a new PORT
         // so get that PORT from in bound packet and
         // send acknowledgment to it
-        DatagramPacket ack = new DatagramPacket(ACK, ACK.length, inetAddress, inBoundDatagramPacket.getPort());
+        DatagramPacket ack = new DatagramPacket(ackBytes, ackBytes.length, inetAddress, inBoundDatagramPacket.getPort());
         try {
             datagramSocket.send(ack);
         } catch (IOException e) {
@@ -151,18 +151,20 @@ public class TFTPClientNet {
      * than 512 bytes
      */
     private boolean isLastPacket(DatagramPacket datagramPacket) {
-        if (datagramPacket.getLength() < 512)
-            return true;
-        else
-            return false;
+        return datagramPacket.getLength() < 512;
     }
     
-    private void writeFile(ByteArrayOutputStream baoStream, String fileName) {
+    private void writeFile(ByteArrayOutputStream baoStream, String fileName) throws IOException {
+        OutputStream outputStream = null;
         try {
-            OutputStream outputStream = new FileOutputStream(fileName);
+            outputStream = new FileOutputStream(fileName);
             baoStream.writeTo(outputStream);
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            if (outputStream != null) {
+                outputStream.close();
+            }
         }
     }
 
