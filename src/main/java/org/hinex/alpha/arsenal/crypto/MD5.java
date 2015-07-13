@@ -5,7 +5,7 @@
  * implement of message-digest 5 algorithm
  */
 
-package org.hinex.alpha.arsenal.cryptography;
+package org.hinex.alpha.arsenal.crypto;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.floor;
