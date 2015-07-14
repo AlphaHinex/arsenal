@@ -24,10 +24,10 @@ public class MD5 {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(MD5.class);
     
-    private static long aContainer = 0x67452301L;
-    private static long bContainer = 0xefcdab89L;
-    private static long cContainer = 0x98badcfeL;
-    private static long dContainer = 0x10325476L;
+    private static final long A = 0x67452301L;
+    private static final long B = 0xefcdab89L;
+    private static final long C = 0x98badcfeL;
+    private static final long D = 0x10325476L;
     private static final int[] R = {7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22,
                                     5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20,
                                     4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23,
@@ -50,11 +50,19 @@ public class MD5 {
         byte[] readyBytes = getReadyBytes(input, charsetName);
         long[] m;
         
+        long aContainer = A;
+        long bContainer = B;
+        long cContainer = C;
+        long dContainer = D;
         for (int i = 0; i < readyBytes.length >>> 6; i++) {
             m = CodecUtil.decode(Arrays.copyOfRange(readyBytes, i << 6, (i + 1) << 6));
             LOGGER.debug("m[]:");
             LOGGER.debug(Arrays.toString(m));
-            fourTrans(m);
+            m = fourTrans(m, aContainer, bContainer, cContainer, dContainer);
+            aContainer = m[0];
+            bContainer = m[1];
+            cContainer = m[2];
+            dContainer = m[3];
         }
         
         byte[] result = CodecUtil.encode(new long[]{aContainer, bContainer, cContainer, dContainer});
@@ -107,7 +115,7 @@ public class MD5 {
         return readyBytes;
     }
     
-    private static void fourTrans(long[] m) {
+    private static long[] fourTrans(long[] m, long aContainer, long bContainer, long cContainer, long dContainer) {
         int g;
         long a = aContainer;
         long b = bContainer;
@@ -139,6 +147,8 @@ public class MD5 {
         bContainer += b;
         cContainer += c;
         dContainer += d;
+        
+        return new long[] {aContainer, bContainer, cContainer, dContainer};
     }
     
     private static long ff(long a, long b, long c, long d, long m, long s, long t) {
