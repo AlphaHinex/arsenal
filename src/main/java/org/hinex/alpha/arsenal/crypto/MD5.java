@@ -14,8 +14,13 @@ import static java.lang.Math.sin;
 
 import java.util.Arrays;
 
+import org.hinex.alpha.arsenal.util.CodecUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class MD5 {
-//  private static Logger log = Logger.getLogger(GenMD5.class);
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(MD5.class);
     
     private static long A = 0x67452301L;
     private static long B = 0xefcdab89L;
@@ -26,28 +31,31 @@ public class MD5 {
                                     4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23,
                                     6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21};
     private static final long[] t = new long[64];
+    
     static {
         for(int i = 0; i < 64; i++) {
             t[i] = (long)floor(abs(sin(i + 1)) * pow(2, 32));
         }
     }
     
-    public static String getMD5(String input) {
+    private MD5() { }
+    
+    public static String hexdigest(String input) {
         byte[] readyBytes = getReadyBytes(input);
         
-        for(int i = 0; i < readyBytes.length>>>6; i++) {
+        for (int i = 0; i < readyBytes.length >>> 6; i++) {
             long[] m = new long[16];
-            m = CodeUtil.decode(Arrays.copyOfRange(readyBytes, i<<6, (i+1)<<6));
-//          log.debug("m[]:");
-//          log.debug(Arrays.toString(m));
+            m = CodecUtil.decode(Arrays.copyOfRange(readyBytes, i << 6, (i + 1) << 6));
+            LOGGER.debug("m[]:");
+            LOGGER.debug(Arrays.toString(m));
             fourTrans(m);
         }
         
-        byte[] result = CodeUtil.encode(new long[]{A, B, C, D});
-//      log.debug("after fourTurns:");
-//      log.debug(Arrays.toString(result));
+        byte[] result = CodecUtil.encode(new long[]{A, B, C, D});
+        LOGGER.debug("after fourTurns:");
+        LOGGER.debug(Arrays.toString(result));
 
-        return CodeUtil.toHexString(result);
+        return CodecUtil.toHexString(result);
     }
     
     private static byte[] getReadyBytes(String input) {
@@ -56,13 +64,13 @@ public class MD5 {
         int readyBytesLen = 0;
         byte[] inputBytes = input.getBytes();
         int inputLen = inputBytes.length;
-//      log.debug("inputBytes.length:" + inputLen);
+        LOGGER.debug("inputBytes.length:" + inputLen);
         readyBytesLen += inputLen;
         
         // generate fill bytes to expand input bytes' length to 64*N + 56
         int mod = inputLen%64;
         int fillNum = mod < 56?(56 - mod):(120 - mod);
-//      log.debug("fillNum:" + fillNum);
+        LOGGER.debug("fillNum:" + fillNum);
         byte[] fillBytes = new byte[fillNum];
         Arrays.fill(fillBytes, (byte)0);
         fillBytes[0] = (byte)0x80;
@@ -72,7 +80,7 @@ public class MD5 {
         long[] inputLenL = new long[2];
         inputLenL[0] = (long)(inputLen<<3);
         inputLenL[1] = 0L;
-        byte[] inputLenBytes = CodeUtil.encode(inputLenL);
+        byte[] inputLenBytes = CodecUtil.encode(inputLenL);
         readyBytesLen += inputLenBytes.length;
         
         // add the three parts above to one byte array
@@ -87,8 +95,8 @@ public class MD5 {
         for(byte temp:inputLenBytes) {
             readyBytes[i++] = temp;
         }
-//      log.debug("readyBytes[" + readyBytes.length + "]:");
-//      log.debug(Arrays.toString(readyBytes));
+        LOGGER.debug("readyBytes[" + readyBytes.length + "]:");
+        LOGGER.debug(Arrays.toString(readyBytes));
         
         return readyBytes;
     }
@@ -171,25 +179,4 @@ public class MD5 {
         return y^(x|(~z));
     }
     
-    public static class Test {
-        public static void main(String[] args) {
-            String input = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            
-            long starttime = System.currentTimeMillis();
-            System.out.println(getMD5(input));
-            long endtime = System.currentTimeMillis();
-            System.out.println(endtime - starttime);
-            
-            try {
-                java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
-                starttime = System.currentTimeMillis();
-                md.update(input.getBytes());
-                System.out.println(CodeUtil.toHexString(md.digest()));
-                endtime = System.currentTimeMillis();
-                System.out.println(endtime - starttime);
-            } catch (java.security.NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 }
