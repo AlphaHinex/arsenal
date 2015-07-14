@@ -22,7 +22,7 @@ class MD5Spec extends Specification {
         def md5Result = MD5.hexdigest(input)
         MessageDigest md = MessageDigest.getInstance('MD5')
         def jmdResult = CodecUtil.toHexString(md.digest(input.bytes))
-        println md5Result
+        println "$input : $md5Result"
         
         expect:
         md5Result.equalsIgnoreCase jmdResult
