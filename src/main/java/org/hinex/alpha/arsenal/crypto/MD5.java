@@ -12,6 +12,8 @@ import static java.lang.Math.floor;
 import static java.lang.Math.pow;
 import static java.lang.Math.sin;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 
 import org.hinex.alpha.arsenal.util.CodecUtil;
@@ -22,47 +24,51 @@ public class MD5 {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(MD5.class);
     
-    private static long A = 0x67452301L;
-    private static long B = 0xefcdab89L;
-    private static long C = 0x98badcfeL;
-    private static long D = 0x10325476L;
-    private static final int[] r = {7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22,
+    private static long aContainer = 0x67452301L;
+    private static long bContainer = 0xefcdab89L;
+    private static long cContainer = 0x98badcfeL;
+    private static long dContainer = 0x10325476L;
+    private static final int[] R = {7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22,
                                     5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20,
                                     4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23,
                                     6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21};
-    private static final long[] t = new long[64];
+    private static final long[] T = new long[64];
     
     static {
         for(int i = 0; i < 64; i++) {
-            t[i] = (long)floor(abs(sin(i + 1)) * pow(2, 32));
+            T[i] = (long)floor(abs(sin(i + 1)) * pow(2, 32));
         }
     }
     
     private MD5() { }
     
-    public static String hexdigest(String input) {
-        byte[] readyBytes = getReadyBytes(input);
+    public static String hexdigest(String input) throws UnsupportedEncodingException {
+        return hexdigest(input, Charset.defaultCharset().name());
+    }
+    
+    public static String hexdigest(String input, String charsetName) throws UnsupportedEncodingException {
+        byte[] readyBytes = getReadyBytes(input, charsetName);
+        long[] m;
         
         for (int i = 0; i < readyBytes.length >>> 6; i++) {
-            long[] m = new long[16];
             m = CodecUtil.decode(Arrays.copyOfRange(readyBytes, i << 6, (i + 1) << 6));
             LOGGER.debug("m[]:");
             LOGGER.debug(Arrays.toString(m));
             fourTrans(m);
         }
         
-        byte[] result = CodecUtil.encode(new long[]{A, B, C, D});
+        byte[] result = CodecUtil.encode(new long[]{aContainer, bContainer, cContainer, dContainer});
         LOGGER.debug("after fourTurns:");
         LOGGER.debug(Arrays.toString(result));
 
         return CodecUtil.toHexString(result);
     }
     
-    private static byte[] getReadyBytes(String input) {
+    private static byte[] getReadyBytes(String input, String charsetName) throws UnsupportedEncodingException {
         // turn input string to bytes
         byte[] readyBytes;
         int readyBytesLen = 0;
-        byte[] inputBytes = input.getBytes();
+        byte[] inputBytes = input.getBytes(charsetName);
         int inputLen = inputBytes.length;
         LOGGER.debug("inputBytes.length:" + inputLen);
         readyBytesLen += inputLen;
@@ -103,23 +109,23 @@ public class MD5 {
     
     private static void fourTrans(long[] m) {
         int g;
-        long a = A, b = B, c = C, d = D; 
+        long a = aContainer;
+        long b = bContainer;
+        long c = cContainer;
+        long d = dContainer; 
         for(int i = 0; i < 64; i++) {
             if(i < 16) {
                 g = i;
-                a = FF(a, b, c, d, m[g], r[i], t[i]);
-            }
-            else if(i < 32) {
+                a = ff(a, b, c, d, m[g], R[i], T[i]);
+            } else if(i < 32) {
                 g = (5*i + 1)%16;
-                a = GG(a, b, c, d, m[g], r[i], t[i]);
-            }
-            else if(i<48) {
+                a = gg(a, b, c, d, m[g], R[i], T[i]);
+            } else if(i<48) {
                 g = (3*i + 5)%16;
-                a = HH(a, b, c, d, m[g], r[i], t[i]);
-            }
-            else {
+                a = hh(a, b, c, d, m[g], R[i], T[i]);
+            } else {
                 g = (7*i)%16;
-                a = II(a, b, c, d, m[g], r[i], t[i]);
+                a = ii(a, b, c, d, m[g], R[i], T[i]);
             }
             
             long temp = d;
@@ -129,53 +135,53 @@ public class MD5 {
             a = temp;
         }
         
-        A += a;
-        B += b;
-        C += c;
-        D += d;
+        aContainer += a;
+        bContainer += b;
+        cContainer += c;
+        dContainer += d;
     }
     
-    private static long FF(long a, long b, long c, long d, long m, long s, long t) {
-        a += F(b,c,d) + m + t;
+    private static long ff(long a, long b, long c, long d, long m, long s, long t) {
+        a += f(b, c, d) + m + t;
         a = ((int) a << s) | ((int) a >>> (32 - s));
         a += b;
         return a;
     }
     
-    private static long F(long x, long y, long z) {
+    private static long f(long x, long y, long z) {
         return (x&y)|((~x)&z);
     }
     
-    private static long GG(long a, long b, long c, long d, long m, long s, long t) {
-        a += G(b,c,d) + m + t;
+    private static long gg(long a, long b, long c, long d, long m, long s, long t) {
+        a += g(b, c , d) + m + t;
         a = ((int) a << s) | ((int) a >>> (32 - s));
         a += b;
         return a;
     }
     
-    private static long G(long x, long y, long z) {
+    private static long g(long x, long y, long z) {
         return (x&z)|(y&(~z));
     }
     
-    private static long HH(long a, long b, long c, long d, long m, long s, long t) {
-        a += H(b,c,d) + m + t;
+    private static long hh(long a, long b, long c, long d, long m, long s, long t) {
+        a += h(b, c, d) + m + t;
         a = ((int) a << s) | ((int) a >>> (32 - s));
         a += b;
         return a;
     }
     
-    private static long H(long x, long y, long z) {
+    private static long h(long x, long y, long z) {
         return x^y^z;
     }
     
-    private static long II(long a, long b, long c, long d, long m, long s, long t) {
-        a += I(b,c,d) + m + t;
+    private static long ii(long a, long b, long c, long d, long m, long s, long t) {
+        a += i(b, c, d) + m + t;
         a = ((int) a << s) | ((int) a >>> (32 - s));
         a += b;
         return a;
     }
     
-    private static long I(long x, long y, long z) {
+    private static long i(long x, long y, long z) {
         return y^(x|(~z));
     }
     

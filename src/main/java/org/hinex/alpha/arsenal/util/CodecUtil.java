@@ -51,8 +51,10 @@ public class CodecUtil {
         long[] output = new long[outputLen];
         
         for(int i = 0; i < outputLen; i++) {
-            output[i] = b2Unsign(input[i*4]) | (b2Unsign(input[i*4 + 1]) << 8) | 
-                        (b2Unsign(input[i*4 + 2]) << 16) | (b2Unsign(input[i*4 + 3]) << 24);
+            output[i] = b2Unsign(input[i*4])
+                        | b2Unsign(input[i*4 + 1]) << 8
+                        | b2Unsign(input[i*4 + 2]) << 16
+                        | b2Unsign(input[i*4 + 3]) << 24;
         }
         
         return output;
