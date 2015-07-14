@@ -25,7 +25,7 @@ class MD5Spec extends Specification {
         println md5Result
         
         expect:
-        md5Result.equals jmdResult
+        md5Result.equalsIgnoreCase jmdResult
         
         where:
         input << inputs
