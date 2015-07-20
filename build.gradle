@@ -16,8 +16,9 @@ repositories {
 }
 
 dependencies {
-    compile libraries.slf4j_api,
-            libraries.groovy
+    compile libraries.ftpserver,
+            libraries.groovy,
+            libraries.slf4j_api
 
     testCompile libraries.junit,
                 libraries.spock

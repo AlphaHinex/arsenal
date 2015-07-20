@@ -44,6 +44,8 @@ libraries.commons_lang = 'commons-lang:commons-lang:2.5'
 
 libraries.commons_logging = 'commons-logging:commons-logging:1.1.1'
 
+libraries.ftpserver = 'org.apache.ftpserver:ftpserver-core:1.0.6'
+
 // groovy-all include all below modules
 libraries.groovy_all = "org.codehaus.groovy:groovy-all:${versions.groovy}"
 
