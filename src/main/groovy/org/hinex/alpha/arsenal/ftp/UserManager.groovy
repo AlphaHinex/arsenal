@@ -11,7 +11,6 @@ import org.apache.ftpserver.usermanager.impl.BaseUser
 import org.apache.ftpserver.usermanager.impl.ConcurrentLoginPermission
 import org.apache.ftpserver.usermanager.impl.TransferRatePermission
 import org.apache.ftpserver.usermanager.impl.WritePermission
-import org.hinex.alpha.arsenal.test.fixtures.file.TestResource
 
 class UserManager extends AbstractUserManager {
     
@@ -46,7 +45,7 @@ class UserManager extends AbstractUserManager {
         def user = new BaseUser()
         user.setName('AlphaHinex')
         user.setPassword('123');
-        user.setHomeDirectory(TestResource.getFile('').getAbsolutePath())
+        user.setHomeDirectory("${new File('').getAbsolutePath()}/src/test/resources")
         user.setEnabled(true)
         user.setMaxIdleTime(0)
 

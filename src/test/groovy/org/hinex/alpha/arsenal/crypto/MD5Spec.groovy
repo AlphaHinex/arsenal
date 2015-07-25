@@ -12,7 +12,8 @@ class MD5Spec extends Specification {
     
     def static inputs = [
         'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
-        '中文'
+        '中文',
+        'https://github.com/AlphaHinex/arsenal'
     ]
     
     def static result
