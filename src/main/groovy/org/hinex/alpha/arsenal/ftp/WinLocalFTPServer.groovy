@@ -2,7 +2,7 @@ package org.hinex.alpha.arsenal.ftp
 
 import org.apache.ftpserver.FtpServerFactory
 
-class WinLocalFtpServer {
+class WinLocalFTPServer {
     
     static main(args) {
         def serverFactory = new FtpServerFactory()
