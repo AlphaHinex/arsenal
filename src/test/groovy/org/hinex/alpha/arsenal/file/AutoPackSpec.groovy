@@ -39,6 +39,27 @@ class AutoPackSpec extends Specification {
         new File("$desPath/src/main/groovy/$PACKAGE").list(filter('.groovy')).length == GROOVY_SRC_COUNT
     }
     
+// Run auto pack directly    
+//    def execute() {
+//        given:
+//        File fl = TestResource.getFile('autopack/fl')
+//        fl.write('''subprojects/core/src/integTest/groovy/org/gradle/api/tasks/bundling/ZipIntegrationTest.groovy
+//subprojects/core/src/main/groovy/org/gradle/api/internal/file/archive/ZipCopyAction.java
+//subprojects/core/src/main/groovy/org/gradle/api/tasks/bundling/Zip.java
+//subprojects/core/src/test/groovy/org/gradle/api/internal/file/archive/ZipCopyActionTest.groovy
+//subprojects/internal-testing/src/main/groovy/org/gradle/test/fixtures/archive/ZipTestFixture.groovy''')
+//        
+//        def flPath = fl.getAbsolutePath()
+//        def srcPath = '/Users/alphahinex/github/gradle'
+//        def desPath = '/Users/alphahinex/Desktop/gradle-pr'
+//        
+//        when:
+//        new AutoPack(flPath, srcPath, desPath).pack()
+//        
+//        then:
+//        new File(desPath).exists()
+//    }
+    
     private def createTestFiles() {
         createDir("autopack/srcdir/src/main/java/$PACKAGE", {
             (1..JAVA_SRC_COUNT).each { idx ->
